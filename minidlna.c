@@ -865,6 +865,12 @@ init(int argc, char **argv)
 			printf("Version " MINIDLNA_VERSION "\n");
 			exit(0);
 			break;
+		case 'U':
+            if (i+1 < argc) 
+                memcpy(uuidvalue+5, argv[++i], strlen(argv[i])-1);
+            else
+                fprintf(stderr, "Option -%c takes one argument.\n", argv[i][1]);
+            break;
 		default:
 			DPRINTF(E_ERROR, L_GENERAL, "Unknown option: %s\n", argv[i]);
 			runtime_vars.port = -1; // triggers help display
@@ -879,9 +885,9 @@ init(int argc, char **argv)
 			"\t\t[-t notify_interval] [-P pid_filename]\n"
 			"\t\t[-s serial] [-m model_number]\n"
 #ifdef __linux__
-			"\t\t[-w url] [-R] [-L] [-S] [-V] [-h]\n"
+			"\t\t[-w url] [-U uuid] [-R] [-L] [-S] [-V] [-h]\n"
 #else
-			"\t\t[-w url] [-R] [-L] [-V] [-h]\n"
+			"\t\t[-w url] [-U uuid] [-R] [-L] [-V] [-h]\n"
 #endif
 			"\nNotes:\n\tNotify interval is in seconds. Default is 895 seconds.\n"
 			"\tDefault pid file is %s.\n"
@@ -890,6 +896,7 @@ init(int argc, char **argv)
 			"\t-v enables verbose output\n"
 			"\t-h displays this text\n"
 			"\t-R forces a full rescan\n"
+			"\t-U sets the UUID to use\n"
 			"\t-L do not create playlists\n"
 #ifdef __linux__
 			"\t-S changes behaviour for systemd\n"
